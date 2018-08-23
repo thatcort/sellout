@@ -1,4 +1,5 @@
 const Agent = artifacts.require("./Agent.sol");
+const Commission = artifacts.require("./Commission.sol");
 const exceptions = require('./exceptions.js');
 const catchRevert = exceptions.catchRevert;
 const BN = require('bn.js');
@@ -39,6 +40,17 @@ contract('Agent Tests', async (accounts) => {
     // console.log(JSON.stringify(logs));
     assert.equal(logs.length, 1, 'One commission entry should exist');
     assert.exists(logs[0].args.commission, 'One commission address should exist');
+  });
+
+  it('Should be able to create and fund a commission at the same time', async () => {
+    const quote = await instance.getQuote.call(100, 100, {from: patron});
+    const result = await instance.commissionArt(100, 100, {from: patron, value: quote.toNumber()});
+    const logs = result.logs.filter(item => item.event === 'CommissionCreated');
+    assert.isTrue(logs.length == 1, 'Should have one CommissionCreated event');
+    assert.exists(logs[0].args.commission, 'One commission address should exist');
+    const c = await Commission.at(logs[0].args.commission);
+    const state = await c.state.call();
+    assert.isTrue(state == 1, 'Should have state 1 (funded)');
   });
 
   it('Should keep track of each commissions for each patron', async () => {

@@ -30,7 +30,7 @@ contract Commission is AccessRestriction, Expires {
   uint public deadline;
   uint public price;
   uint public agentCut;
-  States state;
+  States public state;
   bytes32 location;
   bool paid = false;
 
