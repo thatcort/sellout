@@ -36,6 +36,7 @@ contract Agent is Stoppable, Mortal {
   }
 
   function commissionArt(uint16 width, uint16 height) public payable returns(address) {
+    require(artist != 0);
     uint price = getQuote(width, height);
     uint cut = price * commissionPct / 100;
     Commission c = new Commission(artist, address(this), msg.sender, width, height, now + duration, price, cut);

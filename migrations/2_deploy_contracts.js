@@ -17,7 +17,7 @@ module.exports = function(deployer, network, accounts) {
   deployer.then(async () => {
     const artist = await Artist.deployed();
     const agent = await Agent.deployed();
-    await agent.setArtist(artist.address, 5000, {from: owner});
+    await agent.setArtist(artist.address, 5000000000000, {from: owner});
   });
 
 
