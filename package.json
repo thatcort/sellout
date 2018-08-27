@@ -57,7 +57,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "eth": "ganache-cli -e=100 -d -m=\"decade series hire spoon index put extra injury again valve dumb video\""
   },
   "jest": {
     "collectCoverageFrom": [

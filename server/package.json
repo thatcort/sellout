@@ -1,0 +1,22 @@
+{
+  "name": "artist-server",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "createAccount": "node ./createAccount.js"
+  },
+  "author": "Brian Cort",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  },
+  "dependencies": {
+    "bs58": "^4.0.1",
+    "canvas": "^1.6.11",
+    "ipfs": "^0.31.7",
+    "truffle-contract": "^3.0.6",
+    "web3": "^1.0.0-beta.35"
+  }
+}
