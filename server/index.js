@@ -3,10 +3,14 @@ const AgentABI = require('../build/contracts/Agent.json');
 const CommissionABI = require('../build/contracts/Commission.json');
 const contract = require('truffle-contract');
 
-const Canvas = require('canvas');
+// const Canvas = require('canvas');
+const { createCanvas } = require('canvas');
+console.log('createCanvas: ' + createCanvas);
 const IPFS = require('ipfs')
 const bs58 = require('bs58')
 var ipfs;
+
+const fs = require('fs');
 
 var web3;
 var agentContract;
@@ -64,18 +68,6 @@ function init() {
     });
   });
 
-  // web3.eth.subscribe(
-  //   'logs', { address: agent.address }, (error, result) => {
-  //     if (error) {
-  //       console.log('Problem subscribing to logs: ' + error);
-  //     } else {
-  //       console.log('Log subscription result: '+ result);
-  //     }
-  //   }
-  // ).on('data', log => {
-  //   console.log(log);
-  // });
-
   startServer();
 
 }
@@ -94,11 +86,11 @@ function completeCommission(commission) {
   console.log('Starting commission: ' + commission.address);
   let width, height;
   commission.width.call().then(w => {
-    width = w;
+    width = w.toNumber();
     console.log('Got width: ' + width);
     return commission.height.call();
   }).then(h => {
-    height = h;
+    height = h.toNumber();
     console.log('Got height: ' + height);
     return notifyStarting(commission);
   }).then(result => {
@@ -110,8 +102,6 @@ function completeCommission(commission) {
   }).then(result => {
     console.log('Added file to IPFS: ' + JSON.stringify(result));
     // convert ipfs hash to solidity bytes32 (https://digioli.co.uk/2018/03/08/converting-ipfs-hash-32-bytes/)
-    // const decode = bs58.decode(result.hash);
-    // console.log('decoded: ' + decode);
     const bytes = '0x' + bs58.decode(result[0].hash).slice(2).toString('hex');
     console.log('Saved image to IPFS: ' + result.hash + ' = ' + bytes);
     return notifyReady(commission, bytes);
@@ -126,9 +116,10 @@ function completeCommission(commission) {
 }
 
 function makeImage(width, height) {
-  const canvas = new Canvas(width, height);
+  console.log('Canvas: ' + width + ' x ' + height);
+  // const canvas = new Canvas(width, height);
+  const canvas = createCanvas(width, height);
   const ctx = canvas.getContext('2d');
-
   const random256 = () => Math.floor(Math.random() * 256);
   const hex2 = v => ('0' + v.toString(16)).slice(-2);
   const randomHex2 = () => hex2(random256());
@@ -139,22 +130,25 @@ function makeImage(width, height) {
     let color;
     if (isGrey) {
       const v = randomHex2();
-      color = 'rgb(' + v + v + v + ')';
+      color = '#' + v + v + v;
     } else {
-      color = 'rgb(' + randomHex2() + randomHex2() + randomHex2() + ')';
+      color = '#' + randomHex2() + randomHex2() + randomHex2();
     }
     ctx.fillStyle = color;
 
     const radius = Math.random() * width * 0.5 + Math.max(width * 0.01, 1);
     const x = Math.random() * width;
     const y = Math.random() * height;
+    // console.log('color: ' + color + ' x: ' + x + ' y: ' + y + ' r: ' + radius);
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fill();
   }
-  // const buffer = canvas.toBuffer();
-  // console.log('Buffer: ' + buffer);
-  return Promise.resolve(canvas.createPNGStream());
+
+  const fn = '/tmp/' + Date.now() + '.png';
+  fs.writeFile(fn, canvas.toBuffer(), (err) => console.log(err || 'Wrote buffer to ' + fn));
+  
+  return Promise.resolve(canvas.pngStream());
 }
 
 /** Utility function to get truffle-contract to work with web3 v1 */
