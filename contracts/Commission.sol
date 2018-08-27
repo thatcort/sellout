@@ -75,10 +75,12 @@ contract Commission is AccessRestriction, Expires {
   function refund() public onlyBy(patron) expired(deadline) notState(States.READY) notState(States.REFUNDED) {
     uint bal = address(this).balance;
     uint amt = (bal < price ? bal : price); // Refund up to a maximum of the price of the commission
-    patron.transfer(amt);
     state = States.REFUNDED;
+    patron.transfer(amt);
     emit Refunded(artist, patron, agent, amt);
-    selfdestruct(artist);
+    if (bal > amt) {
+      artist.send(bal - amt); // send any overpayment to the artist as a tip
+    }
   }
 
   function payout() internal isState(States.READY) {
