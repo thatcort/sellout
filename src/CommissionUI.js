@@ -3,6 +3,8 @@ import React from 'react';
 
 import './css/componentUI.css';
 
+const bs58 = require('bs58');
+
 export default class CommissionUI extends React.Component {
 
   stateNames = [
@@ -42,9 +44,10 @@ export default class CommissionUI extends React.Component {
     ]);
     const state = results[0].toNumber();
     const hasLocation = state === 3; // READY
-    let location = null;
+    let location = null, locationURL = null;
     if (hasLocation) { // READY
       location = await commission.getArtLocation.call();
+      locationURL = this.getLocationURL(location);
     }
     this.setState({
       state,
@@ -53,8 +56,24 @@ export default class CommissionUI extends React.Component {
       price: results[3].toString(10),
       artist: results[4],
       deadline: results[5].toNumber() * 1000,
-      location
+      location,
+      locationURL
     });
+  }
+
+  getIpfsHashFromBytes32(bytes32Hex) {
+    // Add our default ipfs values for first 2 bytes:
+    // function:0x12=sha2, size:0x20=256 bits
+    // and cut off leading "0x"
+    const hashHex = "1220" + bytes32Hex.slice(2)
+    const hashBytes = Buffer.from(hashHex, 'hex');
+    const hashStr = bs58.encode(hashBytes)
+    return hashStr
+  }
+
+  getLocationURL(location) {
+    const hash = this.getIpfsHashFromBytes32(location);
+    return 'https://ipfs.io/ipfs/' + hash;
   }
 
   render() {
@@ -81,11 +100,7 @@ export default class CommissionUI extends React.Component {
           </div>
           <div className="columns">
             <div className="column">Location</div>
-            <div className="column">{this.state.location}</div>
-          </div>
-          <div className="columns">
-            <div className="column"></div>
-            <div className="column"></div>
+            <div className="column"><a href={this.state.locationURL}>{this.state.locationURL}</a></div>
           </div>
         </div>
       </div>
