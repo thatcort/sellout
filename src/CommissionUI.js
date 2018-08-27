@@ -26,7 +26,9 @@ export default class CommissionUI extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log('CommissionUI: ' + props.commission);
+    // console.log('CommissionUI: ' + props.commission);
+
+    this.refundDeposit = this.refundDeposit.bind(this);
 
     this.state = {};
     this.updateState();
@@ -59,6 +61,14 @@ export default class CommissionUI extends React.Component {
       location,
       locationURL
     });
+
+    if (state < 3) {
+      commission.contract.allEvents().watch((error, result) => {
+        this.updateState(commission);
+      });
+    } else {
+      commission.contract.allEvents().stopWatching();
+    }
   }
 
   getIpfsHashFromBytes32(bytes32Hex) {
@@ -67,8 +77,8 @@ export default class CommissionUI extends React.Component {
     // and cut off leading "0x"
     const hashHex = "1220" + bytes32Hex.slice(2)
     const hashBytes = Buffer.from(hashHex, 'hex');
-    const hashStr = bs58.encode(hashBytes)
-    return hashStr
+    const hashStr = bs58.encode(hashBytes);
+    return hashStr;
   }
 
   getLocationURL(location) {
@@ -76,9 +86,31 @@ export default class CommissionUI extends React.Component {
     return 'https://ipfs.io/ipfs/' + hash;
   }
 
+  async refundDeposit() {
+    await this.props.commission.refund({gas:200000});
+    this.updateState();
+  }
+
+  renderRefundButton() {
+    if (this.state.deadline <= Date.now()) {
+      return (<button type="button" className="button is-warning" onClick={this.refundDeposit}>Refund Deposit</button>);
+    }
+    return null;
+  }
+
   render() {
     if (!this.state.width) {
       return <div></div>;
+    }
+    const refundButton = this.renderRefundButton();
+    let refundBlock = '';
+    if (refundButton) {
+      refundBlock = (
+        <div className="columns">
+          <div className="column is-one-third has-text-danger is-uppercase has-text-weight-bold">EXPIRED!</div>
+          <div className="column">{refundButton}</div>
+        </div>
+      );
     }
     return (
       <div className="card">
@@ -87,23 +119,24 @@ export default class CommissionUI extends React.Component {
         </div>
         <div className="card-content">
           <div className="columns">
-            <div className="column">Size</div>
+            <div className="column is-one-quarter">Size</div>
             <div className="column">{this.state.width} x {this.state.height}</div>
           </div>
           <div className="columns">
-            <div className="column">Price</div>
+            <div className="column is-one-quarter">Price</div>
             <div className="column">{this.state.price}</div>
           </div>
           <div className="columns">
-            <div className="column">Deadline</div>
+            <div className="column is-one-quarter">Deadline</div>
             <div className="column">{Date(this.state.deadline)}</div>
           </div>
           <div className="columns">
-            <div className="column">Location</div>
+            <div className="column is-one-quarter">Location</div>
             <div className="column"><a href={this.state.locationURL}>{this.state.locationURL}</a></div>
           </div>
+          {refundBlock}
         </div>
       </div>
     );
   }
-}
+} 

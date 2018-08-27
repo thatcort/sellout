@@ -50,7 +50,7 @@ function init() {
       agent = instance;
       console.log('agent: ' + agent);
       agent.CommissionCreated(
-        {fromBlock: 0, toBlock: 'latest'}
+        // {fromBlock: 0, toBlock: 'latest'}
       ).watch((error, result) => {
         if (error) {
           console.log('Error listening for commissions:' + error);
@@ -107,6 +107,9 @@ function completeCommission(commission) {
     return notifyReady(commission, bytes);
   }).then(result => {
     console.log('Notified commission that work is ready');
+    return web3.eth.getBalance(commission.address);
+  }).then(result => {
+    console.log('Artist balance: ' + result);
   }).catch(error => {
     console.log('Problem completing commission: ' + error);
   });
