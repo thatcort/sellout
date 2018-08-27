@@ -50,6 +50,9 @@ contract Commission is AccessRestriction, Expires {
         uint _deadline,
         uint _price,
         uint _agentCut) public {
+    require(_agentCut < _price);
+    require(_width > 0 && _height > 0);
+    require(_artist != 0 && _agent != 0 && _patron != 0);
     artist = _artist;
     patron = _patron;
     agent = _agent;
@@ -79,7 +82,8 @@ contract Commission is AccessRestriction, Expires {
     patron.transfer(amt);
     emit Refunded(artist, patron, agent, amt);
     if (bal > amt) {
-      artist.send(bal - amt); // send any overpayment to the artist as a tip
+      // send any overpayment to the artist as a donation and ignore any failure condition (should not revert the transaction!)
+      artist.send(bal - amt);
     }
   }
 
