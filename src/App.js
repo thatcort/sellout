@@ -86,16 +86,19 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div>Current Account: {this.state.web3 && this.state.web3.eth.defaultAccount}</div>
+        <section>
+          <div>Current Account: {this.state.web3 && this.state.web3.eth.defaultAccount}</div>
+        </section>
 
-        {/* <nav className="navbar pure-menu pure-menu-horizontal">
-            <a href="#" className="pure-menu-heading pure-menu-link"></a>
-        </nav> */}
-
-        <BuyForm web3={this.state.web3} agent={this.state.agent} buyHandler={this.commissionBuyHandler.bind(this)} />
-
-        <h2>Your Artworks</h2>
-        {this.state.commissions.map((c, i) => <CommissionUI commission={c} key={i}></CommissionUI>)}
+        <section>
+          <BuyForm web3={this.state.web3} agent={this.state.agent} buyHandler={this.commissionBuyHandler.bind(this)} />
+        </section>
+        <section>
+          <h2>Your Artworks</h2>
+          <div className="commissions">
+            {this.state.commissions.map((c, i) => <CommissionUI commission={c} key={i}></CommissionUI>)}
+          </div>
+        </section>
       </div>
     );
   }

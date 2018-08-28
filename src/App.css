@@ -1,12 +1,26 @@
 /* PAGE */
 
-body,
-.pure-g [class*=pure-u] {
+body {
   font-family: 'Open Sans', sans-serif;
+  padding: 1em;
 }
 
 h1, h2, h3 {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
+}
+
+section {
+  margin-bottom: 2em;
+}
+
+.commissions {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.commissions .card {
+  min-width: 400px;
+  flex-wrap: nowrap;
 }
 
 code {
@@ -20,18 +34,6 @@ code {
   box-sizing: border-box;
   width: 100%;
   padding: 45px 20px;
-}
-
-.pure-button-primary {
-  background-color: #0c1a2b;
-}
-
-.pure-button-primary:hover {
-  background-color: #233e5e;
-}
-
-.pure-form input[type="text"]:focus {
-  border-color: #0c1a2b;
 }
 
 /* NAVBAR */

@@ -92,7 +92,7 @@ export default class CommissionUI extends React.Component {
   }
 
   renderRefundButton() {
-    if (this.state.deadline <= Date.now()) {
+    if (this.state.state < 3 && this.state.deadline <= Date.now()) {
       return (<button type="button" className="button is-warning" onClick={this.refundDeposit}>Refund Deposit</button>);
     }
     return null;
@@ -109,6 +109,15 @@ export default class CommissionUI extends React.Component {
         <div className="columns">
           <div className="column is-one-third has-text-danger is-uppercase has-text-weight-bold">EXPIRED!</div>
           <div className="column">{refundButton}</div>
+        </div>
+      );
+    }
+    let locationBlock = '';
+    if (this.state.locationURL) {
+      locationBlock = (
+        <div className="columns">
+          <div className="column is-one-quarter">Location</div>
+          <div className="column"><a href={this.state.locationURL}>{this.state.locationURL}</a></div>
         </div>
       );
     }
@@ -130,10 +139,7 @@ export default class CommissionUI extends React.Component {
             <div className="column is-one-quarter">Deadline</div>
             <div className="column">{Date(this.state.deadline)}</div>
           </div>
-          <div className="columns">
-            <div className="column is-one-quarter">Location</div>
-            <div className="column"><a href={this.state.locationURL}>{this.state.locationURL}</a></div>
-          </div>
+          {locationBlock}
           {refundBlock}
         </div>
       </div>

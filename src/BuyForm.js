@@ -7,8 +7,8 @@ export default class BuyForm extends React.Component {
     super(props);
 
     this.state = {
-      width: 0,
-      height: 0,
+      width: 100,
+      height: 100,
       quote: '0'
     }
 
@@ -60,11 +60,11 @@ export default class BuyForm extends React.Component {
       <div className="field is-grouped">
         <div className="control">
           <label className="label">Width</label>
-          <input name="width" className="input" type="number" value={this.state.width} onChange={this.handleInputChange}/>
+          <input name="width" className="input" type="number" value={this.state.width} min="1" max="65535" onChange={this.handleInputChange}/>
         </div>
         <div className="control">
           <label className="label">Height</label>
-          <input name="height" className="input" type="number" value={this.state.height} onChange={this.handleInputChange}/>
+          <input name="height" className="input" type="number" value={this.state.height} min="1" max="65535" onChange={this.handleInputChange}/>
         </div>
       </div>
       <div>Quote: {this.state.quote}</div>
