@@ -76,9 +76,9 @@ contract Commission is AccessRestriction, Expires {
 
   /** If expired without the artist creating the work in time, the patron can get their money back */
   function refund() public onlyBy(patron) expired(deadline) notState(States.READY) notState(States.REFUNDED) {
+    state = States.REFUNDED;
     uint bal = address(this).balance;
     uint amt = (bal < price ? bal : price); // Refund up to a maximum of the price of the commission
-    state = States.REFUNDED;
     patron.transfer(amt);
     emit Refunded(artist, patron, agent, amt);
     if (bal > amt) {
@@ -102,8 +102,8 @@ contract Commission is AccessRestriction, Expires {
 
   /** Called by the artist to inform that the work is completed. Delivers the location of the work */
   function notifyReady(bytes32 _location) public onlyBy(artist) notExpired(deadline) isState(States.STARTED) {
-    location = _location;
     state = States.READY;
+    location = _location;
     payout();
     emit Ready(artist, patron, agent, location);
   }

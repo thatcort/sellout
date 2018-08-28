@@ -4,6 +4,13 @@ import './Util.sol';
 import './LinkedAddressList.sol';
 import './Commission.sol';
 
+/** 
+ * Library Demo
+ * 
+ * Originally the app was going to use a contract for the Artist.
+ * I wrote a dequeue (LinkedAddressList) library to use. This contract demonstrates its use.
+ * The library has unit tests that demonstrate it's use. See tests/TestLinkedAddressList.sol.
+ */
 contract Artist is Mortal {
 
   using LinkedAddressList for LinkedAddressList.List;
