@@ -4,6 +4,8 @@ This project allows users to purchase digital art on the blockchain. The artwork
 
 Conceptually this project plays with ideas of what is art, how is it commodified, how we value algorithmically generated art.
 
+For now the artist only draws random dots. 
+
 There are three actors:
 * The Patron (user) commissions an artwork from the Agent
 * The Agent (smart contract) creates a Commission smart contract detailing the art to be created
@@ -20,5 +22,6 @@ On separate command lines run:
 Once these processes are all running, open a web browser to `localhost:3000` to interact with the application:
 1. Log in to MetaMask in the browser.
 2. Commission an artwork by entering a width and height and clicking `Commission Artwork`
+3. If you are logged in as the agent's owner (account 0 created by ganache) then you will also be presented with controls to modify the agent. For example, you can change the commissions to expire immediately in order to see the refund functionality.
 
-Once the commission is created it will appear below. Once the artwork is created a link will appear to view it on IPFS. If for some reason the artist fails to create the artwork before the commission expires, then the user may request a refund.
+After the commission is created it will appear below. Once the artwork is created a link will appear to view it on IPFS. If for some reason the artist fails to create the artwork before the commission expires, then the user may request a refund.

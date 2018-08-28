@@ -1,5 +1,4 @@
 import React from 'react';
-// import CommissionContractABI from '../build/contracts/Commission.json';
 
 import './css/componentUI.css';
 
@@ -122,7 +121,7 @@ export default class CommissionUI extends React.Component {
       );
     }
     return (
-      <div className="card">
+      <div className="card commission">
         <div className="card-header">
           <div className="card-header-title">{this.stateNames[this.state.state]} - {this.stateDescriptions[this.state.state]}</div>
         </div>

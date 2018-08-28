@@ -19,7 +19,6 @@ section {
 }
 
 .commissions .card {
-  min-width: 400px;
   flex-wrap: nowrap;
 }
 

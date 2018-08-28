@@ -30,6 +30,11 @@ contract Agent is Stoppable, Mortal {
   function setContractDuration(uint _duration) public onlyOwner {
     duration = _duration;
   }
+
+  function getArtistRatePP() public view returns(uint) {
+    require(msg.sender == owner || msg.sender == artist);
+    return ratePP;
+  }
   
   function getQuote(uint16 width, uint16 height) public view returns(uint) {
     return uint(width) * uint(height) * uint(ratePP); 

@@ -23,6 +23,10 @@ export default class BuyForm extends React.Component {
     this.getQuote();
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    this.getQuote();
+  }
+
   async getQuote() {
     const { agent } = this.props;
     if (!agent) {
@@ -56,7 +60,7 @@ export default class BuyForm extends React.Component {
   render() {
     return (
     <div>
-      <h2>Commission a New Artwork</h2>
+      <h1 style={{marginBottom: '0.3em'}}>Commission a New Artwork</h1>
       <div className="field is-grouped">
         <div className="control">
           <label className="label">Width</label>
@@ -67,7 +71,7 @@ export default class BuyForm extends React.Component {
           <input name="height" className="input" type="number" value={this.state.height} min="1" max="65535" onChange={this.handleInputChange}/>
         </div>
       </div>
-      <div>Quote: {this.state.quote}</div>
+      <div>Price: {this.props.web3 && this.props.web3.fromWei(this.state.quote, 'ether')} ether</div>
       <div className="field">
         <div className="control">
           <button type="button" className="button" disabled={this.state.width <= 0 || this.state.height <= 0} onClick={this.buy}>Commission Artwork</button>
