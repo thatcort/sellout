@@ -4,19 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "eth": "ganache-cli -e=100 -d -m=\"decade series hire spoon index put extra injury again valve dumb video\"",
     "start": "nodemon index.js",
     "createAccount": "node ./createAccount.js"
   },
   "author": "Brian Cort",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^1.18.3"
+    "nodemon": "^1.18.6"
   },
   "dependencies": {
     "bs58": "^4.0.1",
-    "canvas": "^2.0.0-alpha.13",
-    "ipfs": "^0.31.7",
+    "canvas": "^2.0.1",
+    "ipfs": "^0.33.1",
     "truffle-contract": "^3.0.6",
-    "web3": "^1.0.0-beta.35"
+    "web3": "^1.0.0-beta.36"
   }
 }

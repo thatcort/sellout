@@ -1,4 +1,3 @@
-var SimpleStorage = artifacts.require("./SimpleStorage.sol");
 // var Util = artifacts.require("./Util.sol");
 var strings = artifacts.require("./libraries/strings.sol");
 var LinkedAddressList = artifacts.require("./LinkedAddressList.sol");
@@ -23,7 +22,6 @@ module.exports = function(deployer, network, accounts) {
   });
 
 
-  // deployer.deploy(SimpleStorage);
   deployer.deploy(strings);
   // deployer.deploy(Commission);
 };
