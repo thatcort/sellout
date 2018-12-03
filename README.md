@@ -60,8 +60,8 @@ Run the artist server:
 `npm run start`
 
 Once these processes are all running, open a web browser to `localhost:3000` to interact with the application:
-1. Log into MetaMask in the browser and connect to the local Ethereum node
+1. Log into MetaMask in the browser and connect to the local Ethereum node using the account seed phrase used to start truffle. See the `eth` script in `client/package.json`.
 2. Commission an artwork by entering a width and height and clicking `Commission Artwork`
 3. If you are logged in as the agent's owner (account 0 created by ganache) then you will also be presented with controls to modify the agent. For example, you can change the commissions to expire immediately in order to see the refund functionality.
 
-After the commission is created it will appear below. Once the artwork is created a link will appear to view it on IPFS. If for some reason the artist fails to create the artwork before the commission expires, then the user may request a refund.
+After the commission is created it will appear below. Once the artwork is created a link will appear to view it on IPFS. If for some reason the artist fails to create the artwork before the commission expires, then the user may request a refund.   
