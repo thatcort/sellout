@@ -88,7 +88,7 @@ class App extends Component {
     return (
       <div className="App">
         <section>
-          <div>Current Account: {this.state.web3 && this.state.web3.eth.defaultAccount}</div>
+          <div>Current Ethereum Account: {this.state.web3 && this.state.web3.eth.defaultAccount}{!this.state.web3 && 'None Found'}</div>
         </section>
 
         <section>

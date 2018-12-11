@@ -60,7 +60,6 @@ export default class BuyForm extends React.Component {
   render() {
     return (
     <div>
-      <h1 style={{marginBottom: '0.3em'}}>Commission a New Artwork</h1>
       <div className="field is-grouped">
         <div className="control">
           <label className="label">Width</label>
@@ -74,7 +73,7 @@ export default class BuyForm extends React.Component {
       <div>Price: {this.props.web3 && this.props.web3.utils.fromWei(this.state.quote, 'ether')} ether</div>
       <div className="field">
         <div className="control">
-          <button type="button" className="button" disabled={this.state.width <= 0 || this.state.height <= 0} onClick={this.buy}>Commission Artwork</button>
+          <button type="button" className="button is-primary" disabled={this.state.width <= 0 || this.state.height <= 0} onClick={this.buy}>Commission Artwork</button>
         </div>
       </div>
     </div>

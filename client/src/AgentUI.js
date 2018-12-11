@@ -2,25 +2,31 @@ import React from 'react';
 import BuyForm from './BuyForm.js';
 const BN = require('bn.js');
 
+
 export default class AgentUI extends React.Component {
+
+  PURCHASE_TAB = 'purchase';
+  DETAILS_TAB = 'details';
+  ADMIN_TAB = 'admin';
 
   constructor(props) {
     super(props);
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.updateAgent = this.updateAgent.bind(this);
+    this.setTab = this.setTab.bind(this);
 
-    this.state = {};
+    this.state = {tab: this.PURCHASE_TAB};
     this.updateState();
   }
 
 
 
-componentDidUpdate(prevProps, prevState, snapshot) {
-  if (!this.initted) {
-    this.updateState();
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!this.initted) {
+      this.updateState();
+    }
   }
-}
 
   async updateState() {
     const {agent, web3} = this.props;
@@ -48,6 +54,10 @@ componentDidUpdate(prevProps, prevState, snapshot) {
     this.setState({[target.name]: target.value});
   }
 
+  setTab(tab = this.PURCHASE_TAB) {
+    this.setState({tab});
+  }
+
   async updateAgent() {
     const {agent} = this.props;
     const {artist, duration, commissionPct, ratePP} = this.state;
@@ -67,64 +77,95 @@ componentDidUpdate(prevProps, prevState, snapshot) {
     this.updateState();
   }
 
-  render() {
-    let durationBlock = (
-      <div className="columns">
-        <div className="column is-one-quarter">Duration (s)</div>
-        <div className="column">{this.state.duration}</div>
-      </div>
+  detailsBlock() {
+    // let durationBlock = (
+    //   <div className="columns">
+    //     <div className="column is-one-quarter">Expiry</div>
+    //     <div className="column">{this.state.duration} seconds</div>
+    //   </div>
+    // );
+    return (
+      <table class="table">
+      <tbody>
+        <tr>
+          <td>Artist</td>
+          <td>{this.state.artist}</td>
+        </tr>
+        <tr>
+          <td>Commission Broker</td>
+          <td>{this.props.agent && this.props.agent.address}</td>
+        </tr>
+        <tr>
+          <td>Commission Expiry</td>
+          <td>{this.state.duration} seconds</td>
+        </tr>
+      </tbody>
+    </table>
     );
-    let ownerBlock = '';
-    if (this.state.isOwner) {
-      durationBlock = (
-        <div className="columns">
-          <div className="column is-one-quarter">Duration (s)</div>
-          <div className="column">
-            <input name="duration" className="input" type="number" value={this.state.duration} min="0" onChange={this.handleInputChange} />
-          </div>
-        </div>
-      );
-      ownerBlock = (
-        <div>
-          <div className="control">
-            <label className="label">Commission %</label>
-            <input name="commissionPct" className="input" type="number" min="0" max="100" value={this.state.commissionPct} onChange={this.handleInputChange}/>
-          </div>
-          <div className="field is-grouped">
-            <div className="control">
-              <label className="label">Artist</label>
-              <input name="artist" className="input" type="text" value={this.state.artist} onChange={this.handleInputChange}/>
-            </div>
-            <div className="control">
-              <label className="label">Rate per Pixel</label>
-              <input name="ratePP" className="input" type="number" value={this.state.ratePP} min="0" onChange={this.handleInputChange}/>
-            </div>
-          </div>
-          <div className="field">
-            <div className="control">
-              <button type="button" className="button" onClick={this.updateAgent}>Update Agent</button>
-            </div>
-          </div>
-        </div>
-      );
+    // <div className="columns">
+    //   <div className="column is-one-quarter">Artist</div>
+    //   <div className="column">{this.state.artist}</div>
+    // </div>
+    // <div className="columns">
+    //   <div className="column is-one-quarter">Agent</div>
+    //   <div className="column">{this.props.agent && this.props.agent.address}</div>
+    // </div>
+    // {durationBlock}
+  }
+
+  adminBlock() {
+    if (!this.state.isOwner) {
+      return '';
     }
     return (
-      <div className="card">
-        <div className="card-header">
-          <div className="card-header-title">Artist's Agent</div>
+      <div>
+        <div className="control">
+          <label className="label">Agent Commission %</label>
+          <input name="commissionPct" className="input" type="number" min="0" max="100" value={this.state.commissionPct} onChange={this.handleInputChange}/>
         </div>
-        <div className="card-content">
-          {this.state.isOwner && <h2>Agent Owner Controls</h2>}
-          <div className="columns">
-            <div className="column is-one-quarter">Artist</div>
-            <div className="column">{this.state.artist}</div>
+        <div className="field is-grouped">
+          <div className="control">
+            <label className="label">Artist</label>
+            <input name="artist" className="input" type="text" value={this.state.artist} onChange={this.handleInputChange}/>
           </div>
-          {durationBlock}
-          {ownerBlock}
-          <div className="has-background-primary" style={{padding: '2em', marginTop: '1em'}}>
-            <BuyForm web3={this.props.web3} agent={this.props.agent} buyHandler={this.props.commissionBuyHandler} />
+          <div className="control">
+            <label className="label">Rate per Pixel</label>
+            <input name="ratePP" className="input" type="number" value={this.state.ratePP} min="0" onChange={this.handleInputChange}/>
           </div>
         </div>
+        <div className="control">
+          <label className="label">Duration (seconds)</label>
+          <input name="duration" className="input" type="number" value={this.state.duration} min="0" onChange={this.handleInputChange} />
+        </div>
+        <div className="field">
+          <div className="control">
+            <button type="button" className="button" onClick={this.updateAgent}>Update Agent</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <div>
+        <h1 style={{marginBottom: '0.3em'}}>Commission a New Artwork</h1>
+
+        <div className="tabs">
+          <ul>
+            <li className={this.state.tab === this.PURCHASE_TAB ? 'is-active' : ''}><a onClick={e => this.setState({tab: this.PURCHASE_TAB})}>Purchase</a></li>
+            <li className={this.state.tab === this.DETAILS_TAB ? 'is-active' : ''}><a onClick={e => this.setState({tab: this.DETAILS_TAB})}>Details</a></li>
+            <li className={this.state.tab === this.ADMIN_TAB ? 'is-active' : ''}><a onClick={e => this.setState({tab: this.ADMIN_TAB})}>Admin</a></li>
+          </ul>
+        </div>
+
+        {this.state.tab === this.PURCHASE_TAB && (
+          <BuyForm web3={this.props.web3} agent={this.props.agent} buyHandler={this.props.commissionBuyHandler} />  
+        )}
+
+        {this.state.tab === this.DETAILS_TAB && this.detailsBlock()}
+        
+        {this.state.tab === this.ADMIN_TAB && this.adminBlock()}
       </div>
     );
   }
