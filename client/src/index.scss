@@ -3,7 +3,13 @@
 // @import '~bulma-extensions/dist/css/bulma-extensions.sass';
 
 body {
-  margin: 0;
-  padding: 0;
+  // margin: 0;
+  // padding: 0;
+  padding-left: 5em !important;
+  padding-right: 5em !important;
   font-family: sans-serif;
+}
+
+h2 {
+  font-size: 1.5em;
 }

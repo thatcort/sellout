@@ -87,18 +87,19 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <section>
+        <h1>Sellout: The Blockchain Artist</h1>
+        {/* <section>
           <div>Current Ethereum Account: {this.state.web3 && this.state.web3.eth.defaultAccount}{!this.state.web3 && 'None Found'}</div>
-        </section>
+        </section> */}
 
         <section>
           <AgentUI web3={this.state.web3} agent={this.state.agent} commissionBuyHandler={this.commissionBuyHandler.bind(this)} />
         </section>
 
         <section>
-          <h1>Your Artworks</h1>
+          <h2>Your Artworks</h2>
           <div className="commissions">
-            {this.state.commissions.map((c, i) => <CommissionUI commission={c} key={i}></CommissionUI>)}
+            {this.state.commissions.map((c, i) => <CommissionUI commission={c} web3={this.state.web3} key={i}></CommissionUI>)}
           </div>
         </section>
       </div>

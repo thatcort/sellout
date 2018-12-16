@@ -95,7 +95,7 @@ export default class CommissionUI extends React.Component {
   }
 
   async refundDeposit() {
-    await this.props.commission.refund({gas:200000});
+    await this.props.commission.refund({gas:200000, from: this.props.web3.eth.defaultAccount});
     this.updateState();
   }
 
@@ -141,7 +141,7 @@ export default class CommissionUI extends React.Component {
           </div>
           <div className="columns">
             <div className="column is-one-quarter">Price</div>
-            <div className="column">{this.state.price}</div>
+            <div className="column">{this.props.web3 && this.props.web3.utils.fromWei(this.state.price, 'ether')}  ETH</div>
           </div>
           <div className="columns">
             <div className="column is-one-quarter">Deadline</div>

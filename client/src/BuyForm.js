@@ -23,8 +23,16 @@ export default class BuyForm extends React.Component {
     this.getQuote();
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidMount() {
     this.getQuote();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.agent !== this.props.agent
+      || prevState.width !== this.state.width
+      || prevState.height !== this.state.height) {
+      this.getQuote();
+    }
   }
 
   async getQuote() {
@@ -70,7 +78,7 @@ export default class BuyForm extends React.Component {
           <input name="height" className="input" type="number" value={this.state.height} min="1" max="65535" onChange={this.handleInputChange}/>
         </div>
       </div>
-      <div>Price: {this.props.web3 && this.props.web3.utils.fromWei(this.state.quote, 'ether')} ether</div>
+      <div>Price: {this.props.web3 && this.props.web3.utils.fromWei(this.state.quote, 'ether')} ETH</div>
       <div className="field">
         <div className="control">
           <button type="button" className="button is-primary" disabled={this.state.width <= 0 || this.state.height <= 0} onClick={this.buy}>Commission Artwork</button>

@@ -6747,6 +6747,9 @@ label.panel-block {
   padding: 3rem 1.5rem 6rem; }
 
 body {
-  margin: 0;
-  padding: 0;
+  padding-left: 5em !important;
+  padding-right: 5em !important;
   font-family: sans-serif; }
+
+h2 {
+  font-size: 1.5em; }

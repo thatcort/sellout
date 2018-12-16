@@ -59,20 +59,20 @@ export default class AgentUI extends React.Component {
   }
 
   async updateAgent() {
-    const {agent} = this.props;
+    const {agent, web3} = this.props;
     const {artist, duration, commissionPct, ratePP} = this.state;
     const cArtist = await agent.artist.call();
     const cDuration = (await agent.duration.call()).toString();
     const cCommissionPct = (await agent.getCommissionPct.call()).toString();
     const cRatePP = (await agent.getArtistRatePP.call()).toString();
     if (artist !== cArtist || ratePP !== cRatePP) {
-      agent.setArtist(artist, new BN(ratePP).toNumber());
+      agent.setArtist(artist, new BN(ratePP).toNumber(), {from: web3.eth.defaultAccount});
     }
     if (duration !== cDuration) {
-      agent.setContractDuration(new BN(duration).toNumber());
+      agent.setContractDuration(new BN(duration).toNumber(), {from: web3.eth.defaultAccount});
     }
     if (commissionPct !== cCommissionPct) {
-      agent.setCommissionPct(new BN(commissionPct).toNumber());
+      agent.setCommissionPct(new BN(commissionPct).toNumber(), {from: web3.eth.defaultAccount});
     }
     this.updateState();
   }
@@ -85,7 +85,7 @@ export default class AgentUI extends React.Component {
     //   </div>
     // );
     return (
-      <table class="table">
+      <table className="table">
       <tbody>
         <tr>
           <td>Artist</td>
@@ -119,9 +119,11 @@ export default class AgentUI extends React.Component {
     }
     return (
       <div>
-        <div className="control">
-          <label className="label">Agent Commission %</label>
-          <input name="commissionPct" className="input" type="number" min="0" max="100" value={this.state.commissionPct} onChange={this.handleInputChange}/>
+        <div className="field is-grouped">
+          <div className="control">
+            <label className="label">Agent Commission %</label>
+            <input name="commissionPct" className="input" type="number" min="0" max="100" value={this.state.commissionPct} onChange={this.handleInputChange}/>
+          </div>
         </div>
         <div className="field is-grouped">
           <div className="control">
@@ -133,13 +135,15 @@ export default class AgentUI extends React.Component {
             <input name="ratePP" className="input" type="number" value={this.state.ratePP} min="0" onChange={this.handleInputChange}/>
           </div>
         </div>
-        <div className="control">
-          <label className="label">Duration (seconds)</label>
-          <input name="duration" className="input" type="number" value={this.state.duration} min="0" onChange={this.handleInputChange} />
+        <div className="field is-grouped">
+          <div className="control">
+            <label className="label">Expiry Duration (seconds)</label>
+            <input name="duration" className="input" type="number" value={this.state.duration} min="0" onChange={this.handleInputChange} />
+          </div>
         </div>
         <div className="field">
           <div className="control">
-            <button type="button" className="button" onClick={this.updateAgent}>Update Agent</button>
+            <button type="button" className="button is-info" onClick={this.updateAgent}>Update Agent</button>
           </div>
         </div>
       </div>
@@ -149,7 +153,7 @@ export default class AgentUI extends React.Component {
   render() {
     return (
       <div>
-        <h1 style={{marginBottom: '0.3em'}}>Commission a New Artwork</h1>
+        <h2 style={{marginBottom: '0.3em'}}>Commission a New Artwork</h2>
 
         <div className="tabs">
           <ul>
