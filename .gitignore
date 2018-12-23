@@ -37,6 +37,10 @@ build
 # Debug log from npm
 npm-debug.log
 
+# configuration secrets
+config
+truffle.js
+
 # Using Sass (.scss), so don't track the generated .css files
 # public/stylesheets/*.css
 # public/stylesheets/*.css.map

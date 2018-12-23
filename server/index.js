@@ -8,6 +8,7 @@ const { createCanvas } = require('canvas');
 console.log('createCanvas: ' + createCanvas);
 const IPFS = require('ipfs')
 const bs58 = require('bs58')
+config = require('config');
 var ipfs;
 
 const fs = require('fs');
@@ -20,12 +21,12 @@ var queue = [];
 
 var httpServer;
 
-const artistPrivateKey= '0x07b5863d2cc574186b2d9f08227fe2e4b1948a854bdfb96d6559e0a59eb808a8';
+const artistPrivateKey= config.get('ethereum.artist.privateKey');
 var artistAccount;
 var agent;
 
 function init() {
-  var provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545')
+  var provider = new Web3.providers.HttpProvider(config.get('ethereum.httpProvider'));
   web3 = new Web3(provider);
 
   artistAccount = web3.eth.accounts.privateKeyToAccount(artistPrivateKey);
